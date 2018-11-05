@@ -134,8 +134,8 @@ function Strategy(options, verify) {
     }
 }
 
-Strategy.prototype.service = function(req) {
-    var serviceURL = this.serviceURL || req.originalUrl;
+Strategy.prototype.service = function(req, options) {
+    var serviceURL = options.serviceURL || this.serviceURL || req.originalUrl;
     var resolvedURL = url.resolve(this.serverBaseURL, serviceURL);
     var parsedURL = url.parse(resolvedURL, true);
     delete parsedURL.query.ticket;
@@ -156,7 +156,7 @@ Strategy.prototype.authenticate = function (req, options) {
             relayState);
     }
 
-    var service = this.service(req);
+    var service = this.service(req, options);
 
     var ticket = req.query.ticket;
     if (!ticket) {
